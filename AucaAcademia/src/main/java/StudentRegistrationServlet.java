@@ -1,10 +1,12 @@
 import java.io.IOException;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.Calendar;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import javax.servlet.ServletException;
@@ -17,65 +19,107 @@ import javax.servlet.http.HttpServletResponse;
 public class StudentRegistrationServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Retrieve student ID from the form
-        String studentId = request.getParameter("studentId");
-
-        // Generate registration code
-        String registrationCode = generateRegistrationCode();
-
-        // Get current timestamp for registration date
-        Timestamp registrationDate = new Timestamp(System.currentTimeMillis());
-
-        // Database connection and insertion
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         try {
             Class.forName("org.postgresql.Driver");
             String url = "jdbc:postgresql://localhost:5432/aucadatabase";
             String username = "postgres";
-            String dbPassword = "A$aprocky08"; // Renamed to dbPassword to avoid conflict
+            String dbPassword = "A$aprocky08";
+
             Connection conn = DriverManager.getConnection(url, username, dbPassword);
+            conn.setAutoCommit(false);
 
-            // Prepare statement for insertion
-            String sql = "INSERT INTO studentRegistration (registration_id, registration_code, student_id, registration_date) VALUES (?, ?, ?, ?)";
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            
-            // Generate UUID for registration ID
-            UUID registrationId = UUID.randomUUID();
+            String studentId = request.getParameter("student_id");
+            String semesterName = request.getParameter("semester_id");
+            String departmentName = request.getParameter("department_name");
 
-            // Set values to the prepared statement
-            pstmt.setObject(1, registrationId);
-            pstmt.setString(2, registrationCode);
-            pstmt.setObject(3, UUID.fromString(studentId)); // Convert studentId to UUID
-            pstmt.setTimestamp(4, registrationDate);
+            System.out.println("Received parameters - student_id: " + studentId + ", semester_id: " + semesterName + ", department_name: " + departmentName);
 
-            // Execute the insert statement
-            int rowsAffected = pstmt.executeUpdate();
-            
-            if (rowsAffected > 0) {
-                response.getWriter().println("Registration successful!");
-            } else {
-                response.getWriter().println("Registration failed. Please try again.");
+            if (studentId == null || semesterName == null || departmentName == null) {
+                conn.rollback();
+                throw new ServletException("Missing required parameters.");
             }
 
-            // Close connections
-            pstmt.close();
+            // Check if the student exists
+            String checkStudent = "SELECT student_id FROM student WHERE student_id = ?";
+            PreparedStatement checkStudentStmt = conn.prepareStatement(checkStudent);
+            checkStudentStmt.setObject(1, UUID.fromString(studentId));
+            ResultSet studentResult = checkStudentStmt.executeQuery();
+
+            if (!studentResult.next()) {
+                conn.rollback();
+                throw new ServletException("Student does not exist. Please register first.");
+            }
+
+            // Check if the semester exists and is valid
+            String checkSemester= "SELECT * FROM semester WHERE semester_name = ? AND starting_date <= CURRENT_DATE AND end_date >= CURRENT_DATE";
+            PreparedStatement checkSemesterStmt = conn.prepareStatement(checkSemester);
+            checkSemesterStmt.setString(1, semesterName);
+            ResultSet semesterResult = checkSemesterStmt.executeQuery();
+
+            if (!semesterResult.next()) {
+                conn.rollback();
+                throw new ServletException("Invalid semester. Please select a valid semester.");
+            }
+
+            // Check if the department exists
+            String checkDepartment = "SELECT academic_id FROM academic_unit WHERE academic_name = ? AND type = 'department'";
+            PreparedStatement checkDepartmentStmt = conn.prepareStatement(checkDepartment);
+            checkDepartmentStmt.setString(1, departmentName);
+            ResultSet departmentResult = checkDepartmentStmt.executeQuery();
+
+            if (!departmentResult.next()) {
+                conn.rollback();
+                throw new ServletException("Department does not exist. Please enter a valid department.");
+            }
+
+            // Generate registration_id and registration_code
+            UUID registrationId = UUID.randomUUID();
+            String registrationCode = generateCode(conn);
+
+            // Generate registration_date
+            Timestamp registrationDate = new Timestamp(System.currentTimeMillis());
+
+            // Insert into studentRegistration table
+            String insertStudentRegistration = "INSERT INTO student_Registration (registration_id, registration_code, student_id, registration_date, semester_id, department_id) VALUES (?, ?, ?, ?, ?, ?)";
+            PreparedStatement insertStudentRegistrationStmt = conn.prepareStatement(insertStudentRegistration);
+            insertStudentRegistrationStmt.setObject(1, registrationId);
+            insertStudentRegistrationStmt.setString(2, registrationCode);
+            insertStudentRegistrationStmt.setObject(3, UUID.fromString(studentId));
+            insertStudentRegistrationStmt.setTimestamp(4, registrationDate);
+            insertStudentRegistrationStmt.setObject(5, UUID.fromString(semesterResult.getString("semester_id")));
+            insertStudentRegistrationStmt.setObject(6, UUID.fromString(departmentResult.getString("academic_id")));
+
+            insertStudentRegistrationStmt.executeUpdate();
+
+            conn.commit();
             conn.close();
+
+            response.getWriter().println("Registration successful!");
+
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
-            response.getWriter().println("Error: " + e.getMessage());
+            response.getWriter().println("An error occurred: " + e.getMessage());
         }
     }
 
-    private String generateRegistrationCode() {
-        // Get the current year
-        int year = Calendar.getInstance().get(Calendar.YEAR);
-        
-        // Implement your logic to generate the registration code based on the year and a sequence number
-        // For simplicity, you can use a static sequence number for now
-        String sequenceNumber = "0001"; // Static sequence number
-        
-        // Concatenate the year and sequence number to form the registration code
-        return "A" + year + sequenceNumber;
-    }
+    private String generateCode(Connection conn) throws SQLException {
+        // You need to implement this method to generate a unique registration code.
+        // The following line is just an example, you should replace it with your own logic.
+        String code = "REG" + UUID.randomUUID().toString().split("-")[0];
 
+        // Check if the generated code already exists
+        String checkCode = "SELECT * FROM student_Registration WHERE registration_code = ?";
+        PreparedStatement checkCodeStmt = conn.prepareStatement(checkCode);
+        checkCodeStmt.setString(1, code);
+        ResultSet checkCodeResult = checkCodeStmt.executeQuery();
+
+        if (checkCodeResult.next()) {
+            // If the code already exists, generate a new one
+            return generateCode(conn);
+        }
+
+        return code;
+    }
 }

@@ -20,7 +20,7 @@ pageEncoding="UTF-8"%>
     </style>
   </head>
   <body>
-    <form method="post" action="./StudentHome" id="form1">
+    <form method="post" action="#" id="form1">
       <div class="aspNetHidden">
         <input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="" />
         <input
@@ -189,17 +189,60 @@ pageEncoding="UTF-8"%>
           </tbody>
         </table>
         
-         <input type="text" name="studentId" placeholder="Enter Student ID" required>
-        <button type="submit" class="btn btn-primary">Register</button>
+
+        <button type="submit" class="btn btn-primary">Register Course</button>
       </div>
     </form>
+    
+   <style>
+    /* Style for the form container */
+    .form-container {
+        width: 300px; /* Adjust width as needed */
+        margin: 20px auto; /* Center the form horizontally and add spacing */
+    }
+
+    /* Style for form inputs */
+    .form-container input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        box-sizing: border-box; /* Include padding and border in the width */
+    }
+
+    /* Style for the submit button */
+    .form-container button[type="submit"] {
+        width: 100%;
+        padding: 10px;
+        background-color: #0d6efd; 
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+
+    /* Hover effect for the submit button */
+    .form-container button[type="submit"]:hover {
+        background-color: #0c3fc2; 
+    }
+</style>
+
+<div class="form-container">
+    <form action="StudentRegistrationServlet" method="post">
+        <!-- Make sure the 'name' attributes match the parameter names in the servlet -->
+        <input type="text" name="student_id" placeholder="Student ID">
+        <input type="text" name="semester_id" placeholder="Semester ID">
+        <input type="text" name="department_name" placeholder="Department Name">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+   
+    
     
     
 
     <footer class="footer mt-auto py-3 bg-light">
       <div class="container">
         <span class="text-muted"
-          >Â© 2024 Adventist University of Central Africa</span
+          >© 2024 Adventist University of Central Africa</span
         >
       </div>
     </footer>
