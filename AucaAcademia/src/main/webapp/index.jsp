@@ -33,92 +33,10 @@ pageEncoding="UTF-8"%>
             <a href="#">Online Registration</a>
             <a href="#">e-Library</a>
             <a href="#">Newsletter</a>
-            <a href="#" onclick="showDashboard()">Dashboard</a>
-            <!-- Modal for Role Selection -->
-            <!-- Modal for Role Selection -->
-            <div id="roleSelectionModal" class="modal">
-              <div class="modal-content" style="text-align: center">
-                <h2 style="color: blue; font-size: 24px">
-                  Welcome to the AUCA Dashboard
-                </h2>
-                <p style="font-size: 18px">
-                  Your gateway to academic and administrative tools.
-                </p>
-                <p>The dashboard provides access to:</p>
-                <ul style="text-align: left">
-                  <li>Student information and courses for students</li>
-                  <li>Teaching resources and research tools for teachers</li>
-                  <li>
-                    Administrative controls and analytics for administrators
-                  </li>
-                </ul>
-                <h3 style="color: blue; font-size: 20px">
-                  Please select your role to continue:
-                </h3>
-                <ul
-                  class="special-ul"
-                  style="
-                    display: inline-block;
-                    text-align: center;
-                    list-style-type: none;
-                  "
-                >
-                  <li style="margin-right: 20px">
-                    <a href="studashboard.jsp" onclick="redirectToDashboard('student')"
-                      >Student</a
-                    >
-                  </li>
-                  <li style="margin-right: 20px">
-                    <a href="lecture.jsp" onclick="redirectToDashboard('teacher')"
-                      >Teacher</a
-                    >
-                  </li>
-                  <li>
-                    <a href="adminDashboard.jsp" onclick="redirectToDashboard('admin')">Admin</a>
-                  </li>
-                </ul>
-              </div>
-            </div>
+            
+           
           </nav>
-          <script>
-            // Show the role selection modal when the "Dashboard" link is clicked
-            function showDashboard() {
-              document.getElementById("roleSelectionModal").style.display =
-                "block";
-            }
-
-            // Hide the modal when the user clicks outside of it or on the close button
-            window.onclick = function (event) {
-              var modal = document.getElementById("roleSelectionModal");
-              if (event.target == modal) {
-                modal.style.display = "none";
-              }
-            };
-
-            // Function to handle role selection and redirection
-            function redirectToDashboard(role) {
-              switch (role) {
-                case "student":
-                  // Redirect to student dashboard
-                  window.location.href = "studentDashboard.jsp";
-                  break;
-                case "teacher":
-                  // Redirect to teacher dashboard
-                  window.location.href = "teacherDashboard.jsp";
-                  break;
-                case "admin":
-                  // Redirect to admin dashboard
-                  window.location.href = "adminDashboard.jsp";
-                  break;
-                default:
-                  alert("Invalid role selection!");
-              }
-
-              // Hide the modal after redirection
-              document.getElementById("roleSelectionModal").style.display =
-                "none";
-            }
-          </script>
+         
 
           <div class="social-icons">
             <img src="./assets/icons/fb.png" alt="facebook" width="20px" />
@@ -149,7 +67,7 @@ pageEncoding="UTF-8"%>
               <a href="about.jsp" onclick="showContent('about')">About</a>
               <ul class="dropdown-content">
                 <li>
-                  <a href="#" onclick="showSubContent('background')"
+                  <a href="background.jsp" onclick="showSubContent('background')"
                     >Background</a
                   >
                 </li>
@@ -178,8 +96,8 @@ pageEncoding="UTF-8"%>
               <a href="admissions.jsp" onclick="showContent('admissions')">Admissions</a>
               <ul class="dropdown-content">
                 <li>
-                  <a href="#" onclick="showSubContent('undergraduate')"
-                    >Undergraduate</a
+                  <a href="undergraduate.jsp" onclick="showSubContent('undergraduate')"
+                    >Undergraduate Admission Requirements</a
                   >
                 </li>
                 <li>
@@ -193,7 +111,7 @@ pageEncoding="UTF-8"%>
               </ul>
             </li>
             <li class="dropdown">
-              <a href="#" onclick="showContent('academics')">Academics</a>
+              <a href="academic.jsp" onclick="showContent('academics')">Academics</a>
               <ul class="dropdown-content">
                 <li>
                   <a href="#" onclick="showSubContent('AcademicCalender')"
@@ -201,7 +119,7 @@ pageEncoding="UTF-8"%>
                   >
                 </li>
                 <li>
-                  <a href="#" onclick="showSubContent('courses')"
+                  <a href="sundergraduate.jsp" onclick="showSubContent('courses')"
                     >Undergraduate Programmes</a
                   >
                 </li>
@@ -213,9 +131,9 @@ pageEncoding="UTF-8"%>
               </ul>
             </li>
             <li class="dropdown">
-              <a href="#" onclick="showContent('media_center')">Media Center</a>
+              <a href="media.jsp" onclick="showContent('media_center')">Media Center</a>
               <ul class="dropdown-content">
-                <li><a href="#" onclick="showSubContent('news')">News</a></li>
+                <li><a href="media.jsp" onclick="showSubContent('news')">News</a></li>
                 <li>
                   <a href="#" onclick="showSubContent('events')">Events</a>
                 </li>
@@ -233,10 +151,10 @@ pageEncoding="UTF-8"%>
               </ul>
             </li>
             <li class="dropdown">
-              <a href="#" onclick="showContent('research')">Research</a>
+              <a href="research.jsp" onclick="showContent('research')">Research</a>
               <ul class="dropdown-content">
                 <li>
-                  <a href="#" onclick="showSubContent('AUCA Journal')"
+                  <a href="research.jsp" onclick="showSubContent('AUCA Journal')"
                     >AUCA Journal</a
                   >
                 </li>

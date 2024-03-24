@@ -105,6 +105,19 @@
         </div>
       </div>
     </section>
+    
+      <section class="delete-semester">
+        <h2>Delete Semester</h2>
+        <form action="deleteSemesterServlet" method="post">
+            <label for="semesterName">Enter Semester Name to Delete:</label>
+            <input type="text" id="semesterName" name="semesterName" required />
+            <input type="submit" value="Delete Semester" />
+        </form>
+    </section>
+
+
+
+
 
     <!-- Other Admin Pages -->
     <section class="admin-pages">

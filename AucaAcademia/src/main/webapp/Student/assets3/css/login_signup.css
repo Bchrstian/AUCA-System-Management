@@ -1,0 +1,97 @@
+.auca-logo-container {
+  display: flex;
+  justify-content: center;
+}
+
+.form-inputs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.foget-password-txt {
+  margin-top: 0.5rem;
+  font-size: 0.7rem;
+  justify-self: right;
+  color: var(--gray-clr);
+}
+.foget-password-txt:hover {
+  text-decoration: underline;
+}
+
+.consent-btn {
+  font-size: 0.8rem;
+}
+
+.consent-txt {
+  font-size: 0.9rem;
+}
+
+@media screen and (min-width: 900px) {
+  body .login-signup {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* -- left side -- */
+.left-side {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: var(--white-clr);
+}
+
+/* -- right side -- */
+@media screen and (min-width: 900px) {
+  .right-side {
+    height: 100vh;
+  }
+  .right-side,
+  #right-side-signup {
+    position: relative;
+    background-image: url("https://registration.auca.ac.rw/assets/images/gishushu_campus.jpg");
+    background-color: var(--white-clr);
+    background-position: left;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+
+  .right-side::before {
+    position: absolute;
+    content: "";
+    background-color: rgba(10, 76, 152, 0.733);
+    inset: 0;
+  }
+  #right-side-signup::before {
+    position: absolute;
+    content: "";
+    background-color: rgba(10, 76, 152, 0.733);
+    inset: 0;
+  }
+}
+
+@media screen and (min-width: 1600px) {
+  .right-side,
+  #right-side-signup {
+    background-position: center;
+    background-attachment: scroll;
+  }
+}
+
+@media screen and (min-height: 780px) {
+  .right-side,
+  #right-side-signup {
+    height: 100vh;
+  }
+}
+.checkbox-group {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.checkbox-group label {
+  margin-right: 1rem;
+}

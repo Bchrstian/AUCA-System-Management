@@ -50,7 +50,7 @@ public class SignupServlet extends HttpServlet {
         }
         
         // Redirect to a success page or display a success message
-        response.sendRedirect("studashboard.jsp");
+        response.sendRedirect("login.jsp");
     }
 
     private boolean isValidPassword(String password) {
