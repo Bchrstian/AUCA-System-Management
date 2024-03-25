@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import Controllers.adminController; // Import the adminController class
+
 @WebServlet("/createSemesterServlet")
 public class CreateSemesterServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -46,7 +48,17 @@ public class CreateSemesterServlet extends HttpServlet {
                     pstmt.setTimestamp(4, endDate);
                     pstmt.executeUpdate();
 
-                    response.sendRedirect("index.jsp"); // Redirect after successful creation
+                    // Redirect after successful creation
+                    response.sendRedirect("index.jsp");
+
+                    // Example usage: Delete a semester
+                    String semesterNameToDelete = "First Semester";
+                    boolean deleted = adminController.deleteSemester(semesterNameToDelete);
+                    if (deleted) {
+                        System.out.println("Semester deleted successfully!");
+                    } else {
+                        System.out.println("Error deleting semester.");
+                    }
                 }
             }
         } catch (ClassNotFoundException | SQLException e) {
